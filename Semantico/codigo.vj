@@ -1,0 +1,25 @@
+for(int i=0,i-0,i+=1){
+	print(x+y)
+	x*=y
+}
+for(int i=0,i-6,i+=1){
+	print(x-0b111)
+	int z
+	read(z)
+	print(x+z)
+} 
+int z=0
+while(z-10){
+	print(z)
+	z+=1
+}
+for(imj,i-10,i+=1){
+	if(i%2){
+		print("Impar")
+	}else{
+		print("par")
+	}
+}
+string s = "hola mundo"
+print(s)
+return 0
