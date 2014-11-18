@@ -15,6 +15,7 @@ int main(){
 	palabrasReservadas.agregarPalabra("char");
 	palabrasReservadas.agregarPalabra("string");
 	palabrasReservadas.agregarPalabra("void");
+	palabrasReservadas.agregarPalabra("double");
 
 	palabrasReservadas.agregarPalabra("for");
 	palabrasReservadas.agregarPalabra("if");
@@ -48,7 +49,7 @@ int main(){
 	int i=0;
 	for(int i=0;i<tokens.size();i++){
 		//cout<<"|"<<tokens[i].tok<<"|";
-		cout<<"<"<<tokens[i].tipo<<" = '"<<tokens[i].tok<<"' "<<tokens[i].linea<<"::"<<tokens[i].numero<<">"<<endl;
+		//cout<<"<"<<tokens[i].tipo<<" = '"<<tokens[i].tok<<"' "<<tokens[i].linea<<"::"<<tokens[i].numero<<">"<<endl;
 	}
 	nodoArbol raiz=eval();
 	//raiz.mostrar(0);

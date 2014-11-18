@@ -16,10 +16,15 @@ public:
 	}
 
 	void agrega(const nodoArbol& v){
-		hijos.push_back(v);
+		try{
+			hijos.push_back(v);
+		}catch(...){
+
+		}
 	}
 
 	void mostrar(int t){
+		return;
 		for(int i=0;i<t;i++)
 			cout.put('-');
 		cout<<lexema<<"{"<<endl;
@@ -95,7 +100,7 @@ bool esUnario(const token& t){
 	return t.tok=="-" || t.tok=="not" || t.tok=="!";
 }
 bool esTipo(const token& t){
-	return t.tok=="int" or t.tok=="long" or t.tok=="uint" or t.tok=="ulong" or t.tok=="real" or t.tok=="char" or t.tok=="string" or t.tok=="void";
+	return t.tok=="int" or t.tok=="long" or t.tok=="uint" or t.tok=="ulong" or t.tok=="real" or t.tok=="char" or t.tok=="string" or t.tok=="void" or t.tok=="double";
 }
 
 nodoArbol eval_logico(){
