@@ -1,0 +1,39 @@
+z = 2
+i = 0
+Et_Ini_0:	#t0 = i < 5
+if !#t0 then goto Et_fin_0
+goto Et_med_0
+Et_med2_0:	i = i + 1
+goto Et_Ini_0
+Et_med_0
+y = 2
+z = z ** 3
+goto Et_med2_0
+Et_fin_0	 empty
+x = 3
+y = 4
+z = 8
+a = 3
+Et_Ini_1:	#t1 = i < 5
+if !#t1 then goto Et_fin_1
+Et_Ini_2:	#t2 = 3 * x
+#t3 = 4 / z
+#t4 = #t2 < #t3
+#t5 = y != b
+#t6 = #t4 and #t5
+#t7 = x < 8
+#t8 = b > 10
+#t9 = #t7 or #t8
+#t10 = #t6 and #t9
+if !#t10 then goto Et_fin_2
+#t11 = 3 * x
+z = z + #t11
+#t12 = 3 / x
+#t13 = 2 - #t12
+y = y + #t13
+#t14 = 4 ** x
+#t15 = 3 + #t14
+e = e + #t15
+Et_fin_2	 empty
+goto Et_Ini_1
+Et_fin_1	 empty

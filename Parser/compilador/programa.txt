@@ -1,0 +1,33 @@
+x = 0
+pi = 3.141592
+a = 0
+b = 1
+i = 0
+Et_Ini_0:	#t0 = i < 10
+if !#t0 then goto Et_fin_0
+goto Et_med_0
+Et_med2_0:	i = i + 1
+goto Et_Ini_0
+Et_med_0
+#t1=print("f(")
+#t2=print(i)
+#t3=print(")=")
+#t4=println(a)
+aux = a
+#t5 = a + b
+a = #t5
+b = aux
+goto Et_med2_0
+Et_fin_0	 empty
+#t6=read(x)
+Et_Ini_1:	#t7 = a < b
+if !#t7 then goto Et_fin_1
+#t8=println(x)
+#t9 = x * pi
+y = #t9
+#t10=ln(y)
+y = #t10
+#t11 = z ** 0.5
+x = x + #t11
+goto Et_Ini_1
+Et_fin_1	 empty
