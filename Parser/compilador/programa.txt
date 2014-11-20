@@ -1,33 +1,66 @@
+B = int_array(200)
+A = int_array(100)
+w = 10
+#t0 = b ** aux
+#t1 = a / #t0
+C = int_array(#t1)
+#t2 = a + b
 x = 0
 pi = 3.141592
 a = 0
 b = 1
 i = 0
-Et_Ini_0:	#t0 = i < 10
-if !#t0 then goto Et_fin_0
+Et_Ini_0:	#t3 = i < 10
+if !#t3 then goto Et_fin_0
 goto Et_med_0
 Et_med2_0:	i = i + 1
 goto Et_Ini_0
 Et_med_0
-#t1=print("f(")
-#t2=print(i)
-#t3=print(")=")
-#t4=println(a)
+#t4=print("f(")
+#t5=print(i)
+#t6=print(")=")
+#t7=println(a)
 aux = a
-#t5 = a + b
-a = #t5
+#t8 = a + b
+a = #t8
 b = aux
 goto Et_med2_0
 Et_fin_0	 empty
-#t6=read(x)
-Et_Ini_1:	#t7 = a < b
-if !#t7 then goto Et_fin_1
-#t8=println(x)
-#t9 = x * pi
-y = #t9
-#t10=ln(y)
-y = #t10
-#t11 = z ** 0.5
-x = x + #t11
+#t9=read(x)
+Et_Ini_1:	#t10 = a < b
+if !#t10 then goto Et_fin_1
+#t11=println(x)
+#t12 = x * pi
+y = #t12
+#t13=ln(y)
+y = #t13
+#t14 = z ** 0.5
+x = x + #t14
 goto Et_Ini_1
 Et_fin_1	 empty
+Et_Ini_2:	#t15 = x != 0
+if !#t15 then goto Et_else_2
+#t16=println(a)
+goto Et_fin_2
+Et_else_2	
+#t17=println(b)
+Et_fin_2	
+Et_Ini_3:	#t18 = x != 0
+if !#t18 then goto Et_else_3
+#t19=println(a)
+goto Et_fin_3
+Et_else_3	
+Et_Ini_4:	#t20 = x < 0
+if !#t20 then goto Et_else_4
+#t21=println(b)
+goto Et_fin_4
+Et_else_4	
+Et_Ini_5:	#t22 = 1 == 1
+if !#t22 then goto Et_else_5
+#t23=println(pi)
+goto Et_fin_5
+Et_else_5	
+x = x + 1
+Et_fin_5	
+Et_fin_4	
+Et_fin_3	

@@ -58,7 +58,7 @@ int G[][63]={
 	{AC,AC,AC,AC,AC,AC,AC,AC,AC,AC,AC,AC,AC,AC,AC,AC,AC,AC,AC,AC,AC,AC,AC,AC,AC,AC,AC,AC,AC,AC,AC,AC,AC,AC,AC,AC,AC,AC, X, X, X, X, X, X, X,18, X, X, X, X, X,AC,AC, X, X,AC, X, X, X, X, X, X,AC},//36
 	{AC,AC,AC,AC,AC,AC,AC,AC,AC,AC,AC,AC,AC,AC,AC,AC,AC,AC,AC,AC,AC,AC,AC,AC,AC,AC,AC,AC,AC,AC,AC,AC,AC,AC,AC,AC,AC,AC, X, X, X, X, X, X, X, X, X, X, X, X, X,AC,AC, X, X,AC, X, X, X, X, X, X,AC},//37
 	{AC,AC,AC,AC,AC,AC,AC,AC,AC,AC,AC,AC,AC,AC,AC,AC,AC,AC,AC,AC,AC,AC,AC,AC,AC,AC,AC,AC,AC,AC,AC,AC,AC,AC,AC,AC,AC,AC, X, X, X, X, X, X, X, X, X, X, X, X, X,AC,AC, X, X,AC, X, X, X, X, X, X,AC},//38
-	{39,39,39,39,39,39,39,39,39,39,39,39,39,39,39,39,39,39,39,39,39,39,39,39,39,39,39,39,39,39,39,39,39,39,39,39, X, X,AC,AC,AC,AC,AC,AC,AC,AC, X,AC,AC,AC, X,39,39,AC, X,AC,AC, X, X,AC, X,AC,AC},//39
+	{39,39,39,39,39,39,39,39,39,39,39,39,39,39,39,39,39,39,39,39,39,39,39,39,39,39,39,39,39,39,39,39,39,39,39,39, X, X,AC,AC,AC,AC,AC,AC,AC,AC, X,AC,AC,AC, X,39,39,AC, X,AC,AC, X, X,AC,AC,AC,AC},//39
 	{40,40,40,40,40,40,40,40,40,40, X, X, X, X,22,26, X, X, X, X, X, X, X, X, X, X, X, X, X, X, X, X, X, X, X, X, X, X,AC,AC,AC,AC,AC,AC,AC,AC, X,AC,AC,AC, X, X, X,AC, X,AC, X, X, X, X,AC, X,AC},//40
 	{41,41,41,41,41,41,41,41,41,41,41,41,41,41,41,41,41,41,41,41,41,41,41,41,41,41,41,41,41,41,41,41,41,41,41,41,41,43,41,41,41,41,41,41,41,41,41,41,41,41,42,41,41,41,41,41,41,41,41,41,41,41,41},//41
 	{44,44,45,46,46,46,46,46,46,46,41,41, X, X, X,41, X, X, X, X, X, X, X,41, X, X, X,41, X,41, X,41, X, X, X, X,41,41, X, X, X, X, X, X, X, X, X, X, X, X,41, X, X, X, X, X, X, X, X, X, X, X,AC},//42
@@ -294,14 +294,14 @@ string token, lexema;
 
 void leeToken(){
 	lexema="";
+	int estado = 0, estAnt=0;
+	while(instruccion[idx]==' ' or instruccion[idx]=='\t'){
+		idx++;
+	}
 	if(instruccion[idx]=='\n'){
 		token=lexema="\n";
 		idx++;
 		return;
-	}
-	int estado = 0, estAnt=0;
-	while(instruccion[idx]==' ' or instruccion[idx]=='\t'){
-		idx++;
 	}
 	while( idx < instruccion.size() and estado != X and estado != AC){
 		char c = instruccion[idx++];
@@ -349,6 +349,7 @@ void evalTermino(){
 			}
 			opx=true;
 			leeToken();
+			//cout<<"Next token "<<lexema<<endl;
 		}else{
 			leeToken();
 			if(lexema!="("){ 
@@ -371,14 +372,15 @@ void evalTermino(){
 		pila.push(lexema);
 		opx=true;
 		leeToken();
-	}else {
+	}else{
 		error=true;
-		cout<<"Error, (, Ide, Dec "<<endl; 
+		cout<<"Error, (, Ide, Dec ::"<<lexema<<","<<token<<endl; 
 		leeToken();
 	}
 }
 
 void evalSigno(){
+
 	bool sig=false;
 	if(lexema=="-"){
 		sig = true;
@@ -421,7 +423,7 @@ void evalMulti(){
 			leeToken();
 		}
 		evalPotencia(); 
-	//	cout<<"Multi "<<token<<"::"<<lexema<<endl;
+		//cout<<"Multi "<<token<<"::"<<lexema<<endl;
 		if(operador=="%" or operador=="/" or operador=="*"){
 			string der = pila.top();
 			pila.pop();
@@ -542,6 +544,7 @@ void evalExp(){
 }
 
 void evalIf(){
+	map<string,string> aux=tabSim;
 	if(lexema=="if"){
 		leeToken();
 		int et=etiquetas++;
@@ -549,26 +552,56 @@ void evalIf(){
 		if(lexema=="("){
 			leeToken();
 			evalExp();
-			codIntermedio<<"if !"<<pila.top()<<" then goto "<<"Et_fin_"<<et<<endl;
+			codIntermedio<<"if !"<<pila.top()<<" then goto "<<"Et_else_"<<et<<endl;
 			if(lexema==")"){
 				leeToken();
 				if(lexema=="\n"){
-					leeToken();
-					while(lexema!="endif"){
+					while(lexema=="\n"){
+						leeToken();
+					}
+					while(lexema!="endif" and lexema!="else" and lexema!="elseif"){
+						evalua();
 						while(lexema=="\n"){
 							leeToken();
 						}
-						evalua();
 					}
-					codIntermedio<<"Et_fin_"<<et<<"\t empty"<<endl;
+					codIntermedio<<"goto Et_fin_"<<et<<endl;
+					codIntermedio<<"Et_else_"<<et<<"\t"<<endl;
+					if(lexema=="else"){
+						leeToken();
+						while(lexema=="\n"){
+							leeToken();
+						}
+						while(lexema!="endif"){
+							//cout<<"leyendo instrucciones else1"<<endl;
+							//cout<<"::"<<lexema<<"::"<<endl;
+							evalua();
+							while(lexema=="\n"){
+								leeToken();
+							}
+							//cout<<"leyendo instrucciones else2"<<endl;
+							//cout<<"::"<<lexema<<"::"<<endl;
+						}
+						leeToken();
+					}else if(lexema=="elseif"){
+						idx-=2;
+						leeToken();
+						evalIf();
+					}else{
+						leeToken();
+					}
+
+					codIntermedio<<"Et_fin_"<<et<<"\t"<<endl;
 				}
 			}
 		}
 	}
+	tabSim=aux;
 }
 
 void evalFor(){
 	if(lexema=="for"){
+		map<string,string> aux=tabSim;
 		leeToken();
 		int et=etiquetas++;
 		if(lexema=="("){
@@ -606,13 +639,14 @@ void evalFor(){
 					}
 				}
 			}
-
 		}
+		tabSim=aux;
 	}
 }
 
 void evalWhile(){
 	if(lexema=="while"){
+		map<string,string> aux=tabSim;
 		leeToken();
 		int et=etiquetas++;
 		codIntermedio<<"Et_Ini_"<<et<<":\t";
@@ -623,98 +657,150 @@ void evalWhile(){
 			if(lexema==")"){
 				leeToken();
 				if(lexema=="\n"){
-					leeToken();
+					while(lexema=="\n"){
+						leeToken();
+					}
 					while(lexema!="endwhile"){
+						//cout<<"leyendo instrucciones while1"<<endl;
+						//cout<<"::"<<lexema<<"::"<<endl;
+						evalua();
+						//cout<<"Salio de evalua"<<endl;
 						while(lexema=="\n"){
 							leeToken();
 						}
-						evalua();
+					//	cout<<"leyendo instrucciones while2"<<endl;
+					//	cout<<"::"<<lexema<<"::"<<endl;
 					}
+					leeToken();
 					codIntermedio<<"goto Et_Ini_"<<et<<endl;
 					codIntermedio<<"Et_fin_"<<et<<"\t empty"<<endl;
 				}
 			}
 		}
+		tabSim=aux;
 	}
 }
 
 void evalDeclaracion(){
 	if(esTipo(lexema)){
 		string tipoDato=lexema;
+		int idx2=idx;
 		leeToken();
 		if(token=="id"){
-			tabSim[lexema]=tipoDato;
+			string iden=lexema;
+			leeToken();
+			if(lexema=="["){
+				leeToken();
+				evalExp();
+				//cout<<"corchete izquierdo"<<lexema<<endl;
+				string size=pila.top();
+				pila.pop();
+				if(lexema=="]"){
+					leeToken();
+					tabSim[lexema]=tipoDato+"[]";
+					codIntermedio<<iden<<" = "<<tipoDato<<"_array("<<size<<")"<<endl;
+				}
+			}else{
+				idx=idx2;
+				leeToken();
+				tabSim[lexema]=tipoDato;
+				evalExp();
+			}
 		}
-		evalExp();
 		while(lexema==","){
+			int idx2=idx;
 			leeToken();
 			if(token=="id"){
-				tabSim[lexema]=tipoDato;
+				string iden=lexema;
+				leeToken();
+				//cout<<iden<<" "<<lexema<<endl;
+				if(lexema=="["){
+					leeToken();
+					evalExp();
+					string size=pila.top();
+					pila.pop();
+					if(lexema=="]"){
+						leeToken();
+						tabSim[lexema]=tipoDato+"[]";
+						codIntermedio<<iden<<" = "<<tipoDato<<"_array("<<size<<")"<<endl;
+					}
+				}else{
+					idx=idx2;
+					leeToken();
+					tabSim[lexema]=tipoDato;
+					evalExp();
+					//cout<<lexema<<endl;
+				}
 			}
-			evalExp();
 		}
+	}
+}
+
+void evalFuncion(){
+	if(lexema=="func"){
+		stack<string> auxPila=pila;
+		map<string,string> aux=tabSim;
+		leeToken();
+		string tipo, fn;
+		if(esTipo(lexema)){
+			tipo="func: "+lexema+",";
+			leeToken();
+			if(token=="id"){
+				fn=lexema;
+				leeToken();
+				if(lexema=="("){
+					leeToken();
+					if(esTipo(lexema)){
+						tipo+=lexema;
+						leeToken();
+						if(token=="id"){
+							tabSim[lexema]=tipo;
+							leeToken();
+						}
+					}
+					while(lexema!=")"){
+						if(lexema==","){
+							leeToken();
+							if(esTipo(lexema)){
+								string tipo2=lexema;
+								leeToken();
+								if(token=="id"){
+									tabSim[lexema]=tipo2;
+									tipo+=","+tipo2;
+									leeToken();
+								}
+							}
+						}
+					}
+					leeToken();
+					if(lexema=="\n"){
+						leeToken();
+						while(lexema!="endfunc"){
+							while(lexema=="\n"){
+								leeToken();
+							}
+							if(lexema=="return"){
+								leeToken();
+								evalExp();
+							}else{
+								evalua();
+							}
+						}
+						leeToken();
+					}
+				}
+			}
+		}
+		tabSim=aux;
+		pila=auxPila;
 	}
 }
 
 void evalua(){
 	pila=stack<string>();
 	opx=false;
-	while(isspace(instruccion[idx])){
-		idx++;
-	}
-	if(instruccion=="")
+	if(instruccion=="" or token=="vacio")
 		return;
-	//leeToken();
-	/*if(lexema=="leer"){
-		leeToken();
-		if(lexema=="("){
-			leeToken();
-			if(token=="id"){
-				string sim=lexema;
-				leeToken();
-				if(lexema==")"){
-					cin>>tabSim[sim];
-					cin.ignore();
-					return;
-				}
-			}
-		}
-	}else if(lexema=="mostrar"){
-		leeToken();
-		if(lexema=="("){
-			leeToken();
-			if(token=="const_str"){
-				string salida=lexema;
-				leeToken();
-				if(lexema==")"){
-					cout<<salida;
-					return;
-				}
-			}else{
-				evalExp();
-				leeToken();
-				return;
-				
-			}
-		}
-	}else if(lexema=="mostrarnl"){
-		leeToken();
-		if(lexema=="("){
-			leeToken();
-			if(token=="const_str"){
-				string salida=lexema.substr(1,-1);
-				leeToken();
-				if(lexema==")"){
-					cout<<salida<<endl;
-					return;
-				}
-			}else{
-				evalExp();
-				leeToken();
-				return;
-			}
-		}
-	}else*/
 	if(lexema=="if"){
 		evalIf();
 	}else if(lexema=="while"){
@@ -723,6 +809,8 @@ void evalua(){
 		evalFor();
 	}else if(esTipo(lexema)){
 		evalDeclaracion();
+	}else if(lexema=="func"){
+		evalFuncion();
 	}else{
 		evalExp();
 	}
@@ -739,7 +827,9 @@ int main(int argc, char**argv){
 			while(lexema=="\n"){
 				leeToken();
 			}
+			//cout<<"Inicio evaluacion "<<lexema<<endl;
 			evalua();
+			//cout<<"Fin evaluacion"<<endl;
 		}
 		codIntermedio.close();
 	}else{
