@@ -414,7 +414,6 @@ void evalTermino(){
 }
 
 void evalSigno(){
-
 	bool sig=false;
 	bool negacion=false;
 	if(lexema=="-"){
@@ -427,7 +426,7 @@ void evalSigno(){
 	evalTermino();
 	if(sig){
 		string val=pila.top();
-		codIntermedio<<"#t"<<temporales<<"=-"<<val<<endl;
+		codIntermedio<<"#t"<<temporales<<"= -1 * "<<val<<endl;
 		pila.pop();
 		pila.push(string("#t")+to_string(temporales++));
 	}else if(negacion){
