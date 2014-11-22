@@ -71,3 +71,9 @@ for(i=0, i<MAX, i+=1)
 		endif
 	endfor
 endfor
+
+i=0
+while(not (i==10))
+	println(i)
+	i+=1
+endwhile

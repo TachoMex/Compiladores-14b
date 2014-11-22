@@ -13,7 +13,7 @@ b = stack_pop(int)
 a  = stack_pop( int)
 Et_Ini_0:
 #t1 = a > b
-ifzero#t1 then goto Et_else_0
+ifzero #t1 then goto Et_else_0
 #t2 = a - b
 stack_push(#t2)
 goto FUNC_absdif_FIN
@@ -172,3 +172,12 @@ goto Et_med2_11
 Et_fin_11	 empty
 goto Et_med2_10
 Et_fin_10	 empty
+i = 0
+Et_Ini_13:
+#t53 = i == 10
+#t54= not #t53
+ifzero#t54 then goto Et_fin_13
+#t55=println(i)
+i = i + 1
+goto Et_Ini_13
+Et_fin_13	 empty

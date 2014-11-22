@@ -416,14 +416,23 @@ void evalTermino(){
 void evalSigno(){
 
 	bool sig=false;
+	bool negacion=false;
 	if(lexema=="-"){
 		sig = true;
+		leeToken();
+	}else if(lexema=="!" or lexema=="not"){
+		negacion=true;
 		leeToken();
 	}
 	evalTermino();
 	if(sig){
 		string val=pila.top();
 		codIntermedio<<"#t"<<temporales<<"=-"<<val<<endl;
+		pila.pop();
+		pila.push(string("#t")+to_string(temporales++));
+	}else if(negacion){
+		string val=pila.top();
+		codIntermedio<<"#t"<<temporales<<"= not "<<val<<endl;
 		pila.pop();
 		pila.push(string("#t")+to_string(temporales++));
 	}
